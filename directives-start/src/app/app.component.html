@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <button
+        class="btn btn-primary"
+        *ngIf="!onlyOdd"
+        (click)="onlyOdd = !onlyOdd">Only show odd numbers</button>
+      <button
+        class="btn btn-primary"
+        *ngIf="onlyOdd"
+        (click)="onlyOdd = !onlyOdd">Only show ever numbers</button>
+      <br><br>
+        <ul class="list-group">
+          <div *ngIf="onlyOdd">
+            <li
+              class="list-group-item"
+              *ngFor="let oddItem of odd"
+            >
+              {{ oddItem }}
+            </li>
+          </div>
+          <div *appUnless="onlyOdd">
+            <li
+              class="list-group-item"
+              *ngFor="let everItem of ever"
+            >
+              {{ everItem }}
+            </li>
+          </div>
+          <!--<ng-template [ngIf]="!onlyOdd">
+            <div>
+              <li
+                class="list-group-item"
+                *ngFor="let everItem of ever"
+              >
+                {{ everItem }}
+              </li>
+            </div>
+          </ng-template>-->
+        </ul>
+      <p appBasicHighlight>Basic high light</p>
+      <p [appAdvancedHighlight]="'green'" [defaultColor]="'blue'">Advanced high light</p>
+    </div>
+  </div>
+</div>

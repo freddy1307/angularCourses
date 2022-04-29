@@ -1,0 +1,78 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form ngForm (ngSubmit)="onSubmit(f)" #f="ngForm">
+        <div id="user-data" ngModelGroup="userData">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              class="form-control"
+              name="username"
+              required
+              ngModel
+            >
+          </div>
+          <button class="btn btn-default" type="button" (click)="suggestUserName()">Suggest an Username</button>
+          <div class="form-group">
+            <label for="email">Mail</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              name="email"
+              ngModel
+              email
+              required
+              #email="ngModel"
+            >
+            <span class="help-block" *ngIf="email.touched && !email.valid">Please enter a valid email</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="secret">Secret Questions</label>
+          <select
+            id="secret"
+            class="form-control"
+            name="secret"
+            [ngModel]="defaultQuestion"
+            required
+          >
+            <option value="pet">Your first Pet?</option>
+            <option value="teacher">Your first teacher?</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <textarea
+              required
+              name="answer"
+              rows="3"
+              class="form-control"
+              [(ngModel)]="answer"
+          ></textarea>
+          <p *ngIf="answer">Your reply: {{ answer }}</p>
+        </div>
+        <div class="radio" *ngFor="let gender of genders">
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              ngModel
+              required
+              [value]="gender"
+            > {{ gender }}
+          </label>
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Submit</button>
+      </form>
+      <div style="margin-top: 20px" *ngIf="submitted">
+        <p>Username: {{ this.formValues.userData.username }}</p>
+        <p>Email: {{ this.formValues.userData.email }}</p>
+        <p>Secret: Your first {{ this.formValues.secret }}</p>
+        <p>Answer: {{ this.formValues.answer }}</p>
+        <p>Gender: {{ this.formValues.gender }}</p>
+      </div>
+    </div>
+  </div>
+</div>
