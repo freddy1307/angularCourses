@@ -1,12 +1,9 @@
-import {async, ComponentFixture, fakeAsync, flush, flushMicrotasks, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, flush, TestBed, waitForAsync} from '@angular/core/testing';
 import {CoursesModule} from '../courses.module';
 import {DebugElement} from '@angular/core';
 
 import {HomeComponent} from './home.component';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {CoursesService} from '../services/courses.service';
-import {HttpClient} from '@angular/common/http';
-import {COURSES} from '../../../../server/db-data';
 import {setupCourses} from '../common/setup-test-data';
 import {By} from '@angular/platform-browser';
 import {of} from 'rxjs';
@@ -23,7 +20,7 @@ describe('HomeComponent', () => {
   let el: DebugElement;
   let courseService: any;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
 
     const courseServiceSpy = jasmine.createSpyObj('CoursesService', ['findAllCourses'])
 
@@ -81,7 +78,7 @@ describe('HomeComponent', () => {
   });
 
 
-  it("should display advanced courses when tab clicked", (done: DoneFn) => {
+  it("should display advanced courses when tab clicked", fakeAsync(() => {
     courseService.findAllCourses.and.returnValue(of(setupCourses()));
     fixture.detectChanges();
 
@@ -89,13 +86,15 @@ describe('HomeComponent', () => {
     click(tabs[1])
     fixture.detectChanges();
 
-    setTimeout(() => {
-      const cards = el.queryAll(By.css(".mat-tab-body-active .mat-card-title"));
-      expect(cards.length).toBe(3, "There are more courses than 3 for the advanced category")
-      expect(cards[0].nativeElement.textContent).toContain("Angular Security Course")
-      done();
-    }, 600)
-  });
+    flush()// Finish all the asynchronous operations
+
+    const cards = el.queryAll(By.css(".mat-tab-body-active .mat-card-title"));
+
+    expect(cards.length).toBe(3, "There are more courses than 3 for the advanced category")
+
+    expect(cards[0].nativeElement.textContent).toContain("Angular Security Course")
+
+  }));
 
 });
 
